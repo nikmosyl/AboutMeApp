@@ -7,22 +7,39 @@
 
 import UIKit
 
-class LoginViewController: UIViewController {
+final class LoginViewController: UIViewController {
 
+    // MARK: - IB Outlets and Properties
     @IBOutlet var userNameTF: UITextField!
     @IBOutlet var passwordTF: UITextField!
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
+    // MARK: - Private Properties
+    private let userName = "1"
+    private let userPassword = "1"
     
+    // MARK: - IB Actions
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super .touchesBegan(touches, with: event)
         view.endEditing(true)
     }
     
+    @IBAction func forgetUserNameAction() {
+        showAlert(withTitle: "Ooooops!", andMessage: "Your name is \(userName) 😉")
+    }
+    
+    @IBAction func forgetPasswordAction() {
+        showAlert(withTitle: "Ooooops!", andMessage: "Your password is \(userPassword) 😉")
+    }
+    
+    @IBAction func unwind(for segue: UIStoryboardSegue) {
+        userNameTF.text = ""
+        passwordTF.text = ""
+    }
+    
+    
+    //MARK: - Override Methods
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        if userNameTF.text == "1" && passwordTF.text == "1" {
+        if userNameTF.text == userName && passwordTF.text == userPassword {
             return true
         }
         showAlert(
@@ -37,18 +54,8 @@ class LoginViewController: UIViewController {
         let welcomeVC = segue.destination as? WelcomeViewController
         welcomeVC?.name = userNameTF.text
     }
-
-    @IBAction func loginButtonAction() {
-    }
     
-    @IBAction func forgetUserNameAction() {
-        showAlert(withTitle: "Ooooops!", andMessage: "Your name is 1 😉")
-    }
-    
-    @IBAction func forgetPasswordAction() {
-        showAlert(withTitle: "Ooooops!", andMessage: "Your password is 1 😉")
-    }
-    
+    //MARK: - Private Methods
     private func showAlert(
         withTitle title: String,
         andMessage message: String,
