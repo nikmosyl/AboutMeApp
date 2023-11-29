@@ -10,32 +10,12 @@ import UIKit
 final class LoginViewController: UIViewController {
 
     // MARK: - IB Outlets and Properties
-    @IBOutlet var userNameTF: UITextField!
-    @IBOutlet var passwordTF: UITextField!
+    @IBOutlet private var userNameTF: UITextField!
+    @IBOutlet private var passwordTF: UITextField!
     
     // MARK: - Private Properties
     private let userName = "1"
     private let userPassword = "1"
-    
-    // MARK: - IB Actions
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super .touchesBegan(touches, with: event)
-        view.endEditing(true)
-    }
-    
-    @IBAction func forgetUserNameAction() {
-        showAlert(withTitle: "Ooooops!", andMessage: "Your name is \(userName) 😉")
-    }
-    
-    @IBAction func forgetPasswordAction() {
-        showAlert(withTitle: "Ooooops!", andMessage: "Your password is \(userPassword) 😉")
-    }
-    
-    @IBAction func unwind(for segue: UIStoryboardSegue) {
-        userNameTF.text = ""
-        passwordTF.text = ""
-    }
-    
     
     //MARK: - Override Methods
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
@@ -50,9 +30,28 @@ final class LoginViewController: UIViewController {
         return false
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    override func prepare(for segue: UIStoryboardSegue,sender: Any?) {
         let welcomeVC = segue.destination as? WelcomeViewController
         welcomeVC?.name = userNameTF.text
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        view.endEditing(true)
+    }
+    
+    // MARK: - IB Actions
+    @IBAction private func forgetUserNameAction() {
+        showAlert(withTitle: "Ooooops!", andMessage: "Your name is \(userName) 😉")
+    }
+    
+    @IBAction private func forgetPasswordAction() {
+        showAlert(withTitle: "Ooooops!", andMessage: "Your password is \(userPassword) 😉")
+    }
+    
+    @IBAction private func unwind(for segue: UIStoryboardSegue) {
+        userNameTF.text = ""
+        passwordTF.text = ""
     }
     
     //MARK: - Private Methods
