@@ -14,19 +14,25 @@ final class LoginViewController: UIViewController {
     @IBOutlet private var passwordTF: UITextField!
     
     // MARK: - Private Properties
-    private let userName = "1"
-    private let userPassword = "1"
+    private let userName = "User"
+    private let userPassword = "Password"
     
     //MARK: - Override Methods
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        userNameTF.text = userName
+        passwordTF.text = userPassword
+    }
+    
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         if userNameTF.text == userName && passwordTF.text == userPassword {
             return true
         }
         showAlert(
-            withTitle: "Invalid login or password",
-            andMessage: "Please, enter correct login and password",
-            andClean: passwordTF
-        )
+            title: "Invalid login or password",
+            message: "Please, enter correct login and password") {
+                self.passwordTF.text = ""
+            }
         return false
     }
     
@@ -42,11 +48,11 @@ final class LoginViewController: UIViewController {
     
     // MARK: - IB Actions
     @IBAction private func forgetUserNameAction() {
-        showAlert(withTitle: "Ooooops!", andMessage: "Your name is \(userName) 😉")
+        showAlert(title: "Ooooops!", message: "Your name is \(userName) 😉")
     }
     
     @IBAction private func forgetPasswordAction() {
-        showAlert(withTitle: "Ooooops!", andMessage: "Your password is \(userPassword) 😉")
+        showAlert(title: "Ooooops!", message: "Your password is \(userPassword) 😉")
     }
     
     @IBAction private func unwind(for segue: UIStoryboardSegue) {
@@ -55,14 +61,10 @@ final class LoginViewController: UIViewController {
     }
     
     //MARK: - Private Methods
-    private func showAlert(
-        withTitle title: String,
-        andMessage message: String,
-        andClean cleaningField: UITextField? = nil
-    ) {
+    private func showAlert(title: String, message: String, completion: (() -> Void)? = nil) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default) { _ in
-                cleaningField?.text = ""
+            completion?()
         }
         alert.addAction(okAction)
         present(alert, animated: true)
