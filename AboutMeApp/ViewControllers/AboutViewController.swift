@@ -7,23 +7,29 @@
 
 import UIKit
 
-class AboutViewController: UIViewController {
-
+final class AboutViewController: UIViewController {
+    
+    @IBOutlet private var nameLabel: UILabel!
+    @IBOutlet private var surnameLabel: UILabel!
+    @IBOutlet private var companyLabel: UILabel!
+    @IBOutlet private var teamLabel: UILabel!
+    @IBOutlet private var postLabel: UILabel!
+    
+    var user: User?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        nameLabel.text = user?.person.name
+        surnameLabel.text = user?.person.surname
+        companyLabel.text = user?.person.company
+        teamLabel.text = user?.person.team
+        postLabel.text = user?.person.post
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+        let bioVC = segue.destination as? BioViewController
+        bioVC?.title = "\(user?.person.name ?? "") \(user?.person.surname ?? "")"
+        bioVC?.user = user
     }
-    */
 
 }

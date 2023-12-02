@@ -14,18 +14,17 @@ final class LoginViewController: UIViewController {
     @IBOutlet private var passwordTF: UITextField!
     
     // MARK: - Private Properties
-    private let userName = "User"
-    private let userPassword = "Password"
+    private let user = User.getUser()
     
     //MARK: - Override Methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        userNameTF.text = userName
-        passwordTF.text = userPassword
+        userNameTF.text = user.name
+        passwordTF.text = user.password
     }
     
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        if userNameTF.text == userName && passwordTF.text == userPassword {
+        if userNameTF.text == user.name && passwordTF.text == user.password {
             return true
         }
         showAlert(
@@ -36,9 +35,20 @@ final class LoginViewController: UIViewController {
         return false
     }
     
-    override func prepare(for segue: UIStoryboardSegue,sender: Any?) {
-        let welcomeVC = segue.destination as? WelcomeViewController
-        welcomeVC?.name = userNameTF.text
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let tabBarVC = segue.destination as? UITabBarController
+        
+        tabBarVC?.viewControllers?.forEach{ viewController in
+            if let welcomeVC = viewController as? WelcomeViewController {
+                welcomeVC.user = user
+            } else if let navigationVC = viewController as? UINavigationController {
+                let title = "\(user.person.name) \(user.person.surname)"
+                navigationVC.title = title
+                let aboutVC = navigationVC.topViewController as? AboutViewController
+                aboutVC?.title = title
+                aboutVC?.user = user
+            }
+        }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -48,11 +58,11 @@ final class LoginViewController: UIViewController {
     
     // MARK: - IB Actions
     @IBAction private func forgetUserNameAction() {
-        showAlert(title: "Ooooops!", message: "Your name is \(userName) 😉")
+        showAlert(title: "Ooooops!", message: "Your name is \(user.name) 😉")
     }
     
     @IBAction private func forgetPasswordAction() {
-        showAlert(title: "Ooooops!", message: "Your password is \(userPassword) 😉")
+        showAlert(title: "Ooooops!", message: "Your password is \(user.password) 😉")
     }
     
     @IBAction private func unwind(for segue: UIStoryboardSegue) {
